@@ -1,4 +1,5 @@
 let topViewBarChart;
+let selectedNovel = 0;
 
 d3.csv('../data/novelpia_top100_0615_30d.csv')
     .then(data => {

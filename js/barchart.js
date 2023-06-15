@@ -3,7 +3,7 @@ class BarChartVis {
         this.config = {
             parentElement: _config.parentElement,
             width: 400,
-            height: 300,
+            height: 200,
             margin: {top: 50, right: 10, bottom: 10, left: 100}
         }
         this.data = _data;
@@ -54,10 +54,22 @@ class BarChartVis {
         vis.renderVis();
     }
 
+    updateSelected() {
+        let vis = this;
+        if (selectedNovel === 0) {
+            vis.bars.attr('opacity', 1.0);
+            
+        }
+        else {
+            vis.bars.filter(d => d.novelID !== selectedNovel)
+                    .attr('opacity', 0.5);
+        }
+    }
+
     renderVis() {
         let vis = this;
 
-        vis.chart.selectAll("myRect")
+        vis.bars = vis.chart.selectAll("myRect")
             .data(vis.data)
             .enter()
             .append("rect")
@@ -66,6 +78,15 @@ class BarChartVis {
             .attr("width", d => vis.xScale(d.view))
             .attr("height", vis.yScale.bandwidth() )
             .attr("fill", "#69b3a2")
+        
+        vis.bars.on('mouseenter', (event, d) => {
+                selectedNovel = d.novelID;
+                vis.updateSelected();
+            })
+            .on('mouseleave', (event, d) => {
+                selectedNovel = 0;
+                vis.updateSelected();
+            })
 
         vis.xAixsChartG.call(vis.xAxis);
         vis.yAxisChartG.call(vis.yAxis);
