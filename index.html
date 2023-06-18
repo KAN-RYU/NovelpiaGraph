@@ -12,11 +12,32 @@
 
 <body>
     <div id="Title">Novelpia Graph</div>
-    <div class="card" style="width: 18rem;" id="tooltip">
-        <img src="..." class="card-img-top" id="tooltipImage">
+    
+    <div id="checkboxes">
+        <div>
+            Top 10 Most Used Main Tags
+        </div>
+    </div>
+    
+    <div>
+        <svg id="thumbnailChart"></svg>
+    </div>
+    <div>
+        <svg id="viewChart"></svg>
+    </div>
+    <div>
+        <svg id="goodChart"></svg>
+    </div>
+    <div>
+        <svg id="tagsChart"></svg>
+    </div>
+
+    <div class="card" id="tooltip">
+        <img src="" class="card-img-top" id="tooltipImage">
         <div class="card-body">
             <h5 class="card-title" id="tooltipTitle">Card title</h5>
-            <p class="card-text" id="tooltipDescription">Some quick example text to build on the card title and make up the bulk of the card's
+            <p class="card-text" id="tooltipDescription">Some quick example text to build on the card title and make up
+                the bulk of the card's
                 content.</p>
         </div>
         <ul class="list-group list-group-flush">
@@ -27,18 +48,6 @@
         <div class="card-body">
             <a href="#" class="card-link" id="tooltipLink">Go to read this novel</a>
         </div>
-    </div>
-    <div>
-        <svg id="viewChart"></svg>
-    </div>
-    <div>
-        <svg id="thumbnailChart"></svg>
-    </div>
-    <div>
-        <svg id="goodChart"></svg>
-    </div>
-    <div>
-        <svg id="tagsChart"></svg>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

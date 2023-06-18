@@ -5,6 +5,20 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+#checkboxes {
+    display: block;
+    position: absolute;
+    left: 500px;
+
+}
+
+#tooltip {
+    width: 18rem; 
+    position: absolute;
+    left: 800px;
+    top: 50px;
+}
+
 #Title {
     display: flex;
     background-color: black;

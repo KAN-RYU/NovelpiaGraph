@@ -10,8 +10,8 @@ class BarChartVis {
             yTickFormat: _config.yTickFormat,
             color: _config.color,
             name: _config.name,
-            width: 400,
-            height: 200,
+            width: 300,
+            height: 150,
             margin: { top: 50, right: 10, bottom: 10, left: 100 }
         }
         this.data = _data;
@@ -40,7 +40,7 @@ class BarChartVis {
         vis.svg = d3.select(vis.config.parentElement)
             .attr('width', containerWidth)
             .attr('height', containerHeight);
-        
+
         vis.title = vis.svg.append('text')
             .style('font-size', 18)
             .text(vis.config.name)
@@ -50,12 +50,7 @@ class BarChartVis {
         vis.chart = vis.svg.append('g')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
-        vis.xAixsChartG = vis.chart.append('g')
-            .attr('class', 'x-axis')
-        // .attr('transform', `translate(0, ${height})`)
 
-        vis.yAxisChartG = vis.chart.append('g')
-            .attr('class', 'y-axis')
     }
 
     updateVis() {
@@ -66,7 +61,15 @@ class BarChartVis {
 
         vis.yScale.domain(vis.data.map(d => d.title));
 
-        vis.chart.selectAll("rect").data(vis.data).remove();
+        vis.chart.remove();
+        vis.chart = vis.svg.append('g')
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
+        vis.xAixsChartG = vis.chart.append('g')
+            .attr('class', 'x-axis')
+        // .attr('transform', `translate(0, ${height})`)
+
+        vis.yAxisChartG = vis.chart.append('g')
+            .attr('class', 'y-axis')
 
         vis.renderVis();
     }

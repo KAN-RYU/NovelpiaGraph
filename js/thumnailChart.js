@@ -4,13 +4,14 @@ class ThumbnailChart {
         this.config = {
             parentElement: _config.parentElement,
             width: 600,
-            height: 200,
+            height: 210,
             margin: { top: 10, right: 10, bottom: 10, left: 10 },
+            name: "Top 3 Most View Novel",
             imagewWidth: 120,
             imageMargin: 10,
             imageRatio: 20,
             fontSize: 12,
-
+            titleFontSize: 18,
         }
         this.data = _data;
         this.initVis();
@@ -38,6 +39,12 @@ class ThumbnailChart {
             .attr('width', containerWidth)
             .attr('height', containerHeight);
 
+        vis.title = vis.svg.append('text')
+            .style('font-size', vis.config.titleFontSize)
+            .text(vis.config.name)
+            .attr('x', vis.config.margin.left - 5)
+            .attr('y', 25)
+
         vis.chart = vis.svg.append('g')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
@@ -51,6 +58,10 @@ class ThumbnailChart {
     updateVis() {
         let vis = this;
 
+        vis.chart.remove();
+        vis.chart = vis.svg.append('g')
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
+
         vis.renderVis();
     }
 
@@ -58,6 +69,10 @@ class ThumbnailChart {
         let vis = this;
         if (selectedNovel !== 0) {
             vis.images.filter(d => d.novelID !== selectedNovel)
+                .attr('opacity', 0.5);
+        }
+        else if (selectedTag.length != 0) {
+            vis.images.filter(d => !d.tags.includes(selectedTag))
                 .attr('opacity', 0.5);
         }
         else {
@@ -72,22 +87,22 @@ class ThumbnailChart {
             .data(vis.data)
             .enter()
             .append("image")
-            .attr("href", d=>d.thumbnailURL)
-            .attr("x", (d,i) => i*(vis.config.imagewWidth + vis.config.imageMargin) - i*(i-1)/2*vis.config.imageRatio)
-            // .attr("y", d => vis.yScale(d.title))
-            .attr("width", (d,i) => vis.config.imagewWidth - i*vis.config.imageRatio)
-            .attr("height", (d,i) => (vis.config.imagewWidth - i*vis.config.imageRatio )*1.5);
-        
+            .attr("href", d => d.thumbnailURL)
+            .attr("x", (d, i) => i * (vis.config.imagewWidth + vis.config.imageMargin) - i * (i - 1) / 2 * vis.config.imageRatio)
+            .attr("y", vis.config.titleFontSize)
+            .attr("width", (d, i) => vis.config.imagewWidth - i * vis.config.imageRatio)
+            .attr("height", (d, i) => (vis.config.imagewWidth - i * vis.config.imageRatio) * 1.5);
+
         vis.labels = vis.chart.selectAll(".label")
             .data(vis.data)
             .enter()
             .append("text")
-            .text((d,i)=>(i+1)+"위 " + d.title)
+            .text((d, i) => (i + 1) + "위 " + d.title)
             .style('font-size', vis.config.fontSize)
-            .attr("x", (d,i) => i*(vis.config.imagewWidth + vis.config.imageMargin) - i*(i-1)/2*vis.config.imageRatio)
-            .attr("y", (d,i) => (vis.config.imagewWidth - i*vis.config.imageRatio )*1.5 + vis.config.fontSize)
-            .attr("width", (d,i) => vis.config.imagewWidth - i*vis.config.imageRatio)
-            .attr("height", (d,i) => (vis.config.imagewWidth - i*vis.config.imageRatio )*1.5);
+            .attr("x", (d, i) => i * (vis.config.imagewWidth + vis.config.imageMargin) - i * (i - 1) / 2 * vis.config.imageRatio)
+            .attr("y", (d, i) => (vis.config.imagewWidth - i * vis.config.imageRatio) * 1.5 + vis.config.fontSize + vis.config.titleFontSize)
+            .attr("width", (d, i) => vis.config.imagewWidth - i * vis.config.imageRatio)
+            .attr("height", (d, i) => (vis.config.imagewWidth - i * vis.config.imageRatio) * 1.5);
 
 
         vis.images.on('mouseenter', (event, d) => {
