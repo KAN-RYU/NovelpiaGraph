@@ -376,8 +376,22 @@ function checkboxClicked() {
             for (let k = 0; k < sourceTags.length; k++) {
                 if (destTags.includes(sourceTags[k])) count += 1;
             }
-            if (count > 1) {
+            if (count > 3) {
                 edges.push({'source': parseInt(data[i].novelID), 'dest': parseInt(data[j].novelID), 'value': count})
+            }
+        }
+    }
+    for (let i = 0; i <100; i++){
+        let novelID= parseInt(data[i].novelID);
+        let noFlag = true;
+        for (j=0; j < edges.length; j++) {
+            if (edges[j].source === novelID || edges[j].dest === novelID)
+                noFlag = false;
+            if (!noFlag) break;
+        }
+        if (noFlag) {
+            for (j=0; j < nodes.length; j++) {
+                if(nodes[j].id === novelID) nodes.splice(j, 1);
             }
         }
     }
