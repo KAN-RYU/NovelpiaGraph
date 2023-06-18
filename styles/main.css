@@ -12,11 +12,16 @@ body {
 
 }
 
+#nodeGraph {
+    position: absolute;
+    left: 400px;
+}
+
 #tooltip {
     width: 18rem; 
     position: absolute;
     left: 800px;
-    top: 50px;
+    top: 30px;
 }
 
 #Title {

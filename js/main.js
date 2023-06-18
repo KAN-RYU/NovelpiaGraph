@@ -113,11 +113,11 @@ d3.csv('../data/novelpia_top100_0615_30d.csv')
                 .attr("fill", vis.config.color)
 
             vis.bars.on('mouseenter', (event, d) => {
-                selectedTag = [d.tags[0]];
+                selectedTag = d.tags[0];
                 updateSelectionAll();
             })
                 .on('mouseleave', (event, d) => {
-                    selectedTag = [];
+                    selectedTag = "";
                     updateSelectionAll();
                 })
 
@@ -135,6 +135,30 @@ d3.csv('../data/novelpia_top100_0615_30d.csv')
             }
         }
         topTagsBarChart.updateVis();
+
+        //node graph
+        let nodes = [];
+        for (let i = 0; i <100; i++){
+            nodes.push({'id': parseInt(data[i].novelID), 'title': data[i].title, 'mainTag': data[i].tags.split('/')[0]
+            ,'tags': data[i].tags})
+        }
+        let edges = [];
+        for (let i = 0; i <100; i++ ){
+            let sourceTags = data[i].tags.split('/')
+            for (let j =i ;j <100; j++) {
+                let destTags = data[j].tags.split('/')
+                let count = 0
+                for (let k = 0; k < sourceTags.length; k++) {
+                    if (destTags.includes(sourceTags[k])) count += 1;
+                }
+                if (count > 4) {
+                    edges.push({'source': parseInt(data[i].novelID), 'dest': parseInt(data[j].novelID), 'value': count})
+                }
+            }
+        }
+        // console.log(nodes)
+
+        graph = ForceGraph({nodes:nodes, edges:edges});
 
         addMainTagBoxes(data, topTagsDataRaw);
     })
