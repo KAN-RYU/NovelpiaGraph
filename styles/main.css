@@ -14,13 +14,13 @@ body {
 
 #nodeGraph {
     position: absolute;
-    left: 400px;
+    left: 40vw;
 }
 
 #tooltip {
     width: 18rem; 
     position: absolute;
-    left: 800px;
+    left: calc(100vw - 350px);
     top: 30px;
 }
 

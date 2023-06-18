@@ -27,8 +27,8 @@ function ForceGraph(
     edgeStrength,
 
     colors = d3.schemeTableau10,
-    width = 300,
-    height = 400,
+    width = 500,
+    height = 600,
     invalidation
 ) {
     const N = d3.map(nodes, nodeID).map(intern);
@@ -61,6 +61,7 @@ function ForceGraph(
         .on("tick", ticked);
 
     const svg = d3.select("#nodeGraph")
+        .append('svg')
         .attr("width", width)
         .attr("height", height)
         .attr("viewBox", [-width / 2, -height / 2, width, height])

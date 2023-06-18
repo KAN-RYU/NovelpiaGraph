@@ -1,4 +1,4 @@
-let topViewBarChart, topGoodBarChart, topTagsBarChart;
+let topViewBarChart, topGoodBarChart, topTagsBarChart, graph;
 let wholeData = [];
 let selectedNovel = 0, selectedTag = [];
 let mainTags = [];
@@ -151,12 +151,26 @@ d3.csv('../data/novelpia_top100_0615_30d.csv')
                 for (let k = 0; k < sourceTags.length; k++) {
                     if (destTags.includes(sourceTags[k])) count += 1;
                 }
-                if (count > 4) {
+                if (count > 3) {
                     edges.push({'source': parseInt(data[i].novelID), 'dest': parseInt(data[j].novelID), 'value': count})
                 }
             }
         }
-        // console.log(nodes)
+        for (let i = 0; i <100; i++){
+            let novelID= parseInt(data[i].novelID);
+            let noFlag = true;
+            for (j=0; j < edges.length; j++) {
+                if (edges[j].source === novelID || edges[j].dest === novelID)
+                    noFlag = false;
+                if (!noFlag) break;
+            }
+            if (noFlag) {
+                for (j=0; j < nodes.length; j++) {
+                    if(nodes[j].id === novelID) nodes.splice(j, 1);
+                }
+            }
+        }
+        console.log(nodes)
 
         graph = ForceGraph({nodes:nodes, edges:edges});
 
@@ -213,6 +227,7 @@ function addMainTagBoxes(data, topTags) {
         mainTags.push(tags[0]);
     }
     mainTags = new Set(mainTags);
+    console.log(mainTags);
     let tags = [];
     topTags.forEach(function (element) { if (mainTags.has(element.title)) tags.push(element.title) });
     mainTags = tags;
@@ -333,4 +348,40 @@ function checkboxClicked() {
     topTagsData = topTagsData.slice(0, 10);
     topTagsBarChart.data = topTagsData;
     topTagsBarChart.updateVis();
+
+    d3.select("#nodeGraph")
+    .select('svg').remove()
+
+    //node graph
+    let nodes = [];
+    for (let i = 0; i <100; i++){
+        let tagFlag = false;
+        data[i]["tags"].split('/').forEach(tag => { if (negativeTag.includes(tag)) tagFlag = true; })
+        if (tagFlag) continue;
+        nodes.push({'id': parseInt(data[i].novelID), 'title': data[i].title, 'mainTag': data[i].tags.split('/')[0]
+        ,'tags': data[i].tags})
+    }
+    let edges = [];
+    for (let i = 0; i <100; i++ ){
+        let tagFlag = false;
+        data[i]["tags"].split('/').forEach(tag => { if (negativeTag.includes(tag)) tagFlag = true; })
+        if (tagFlag) continue;
+        let sourceTags = data[i].tags.split('/')
+        for (let j =i ;j <100; j++) {
+            let tagFlag2 = false;
+            data[j]["tags"].split('/').forEach(tag => { if (negativeTag.includes(tag)) tagFlag2 = true; })
+            if (tagFlag2) continue;
+            let destTags = data[j].tags.split('/')
+            let count = 0
+            for (let k = 0; k < sourceTags.length; k++) {
+                if (destTags.includes(sourceTags[k])) count += 1;
+            }
+            if (count > 1) {
+                edges.push({'source': parseInt(data[i].novelID), 'dest': parseInt(data[j].novelID), 'value': count})
+            }
+        }
+    }
+    // console.log(nodes)
+
+    graph = ForceGraph({nodes:nodes, edges:edges});
 }
