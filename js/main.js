@@ -3,7 +3,7 @@ let wholeData = [];
 let selectedNovel = 0, selectedTag = [];
 let mainTags = [];
 
-d3.csv('/_data/novelpia_top100_0615_30d.csv')
+d3.csv('./_data/novelpia_top100_0615_30d.csv')
     .then(data => {
         wholeData = data;
 
